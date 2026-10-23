@@ -1,0 +1,16 @@
+{
+  "name": "lumen-aurora",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Lumen — Aurora Glass cinematic new tab",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "icons": "node scripts/make-icons.mjs",
+    "deploy": "node scripts/deploy.mjs"
+  }
+}
