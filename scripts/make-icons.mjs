@@ -1,0 +1,37 @@
+import sharp from 'sharp';
+import { mkdir, writeFile } from 'node:fs/promises';
+
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Lumen">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1226"/>
+      <stop offset="1" stop-color="#03060f"/>
+    </linearGradient>
+    <linearGradient id="aurora" x1="0.05" y1="0.9" x2="0.95" y2="0.1">
+      <stop offset="0" stop-color="#5fe3d3"/>
+      <stop offset="0.52" stop-color="#7c9bff"/>
+      <stop offset="1" stop-color="#c9b6ff"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.75" cy="0.3" r="0.6">
+      <stop offset="0" stop-color="#7c9bff" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#7c9bff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#bg)"/>
+  <rect x="1" y="1" width="126" height="126" rx="29" fill="none" stroke="#ffffff" stroke-opacity="0.10"/>
+  <circle cx="94" cy="36" r="48" fill="url(#halo)"/>
+  <path d="M30 92c12-26 27-10 40-37 8-16 21-18 30-25" fill="none" stroke="url(#aurora)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M30 103c13-15 26-7 38-22 9-12 20-14 30-18" fill="none" stroke="url(#aurora)" stroke-opacity="0.34" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="99" cy="29" r="4.5" fill="#eaf9ff"/>
+</svg>`;
+
+const out = 'public';
+await mkdir(`${out}/icons`, { recursive: true });
+await writeFile(`${out}/favicon.svg`, svg, 'utf8');
+for (const size of [16, 32, 48, 128]) {
+  await sharp(Buffer.from(svg))
+    .resize(size, size, { fit: 'cover' })
+    .png({ compressionLevel: 9 })
+    .toFile(`${out}/icons/icon${size}.png`);
+  console.log(`icon${size}.png`);
+}
