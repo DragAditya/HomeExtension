@@ -1,0 +1,221 @@
+.shortcut-tile {
+  cursor: pointer;
+  user-select: none;
+}
+
+.shortcut-tile:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.shortcut-tile:focus-visible .shortcut-tile__icon {
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 4px rgba(var(--accent-rgb), 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.shortcut-tile:focus-within .shortcut-edit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.shortcut-icon {
+  position: relative;
+  display: grid;
+  width: 25px;
+  height: 25px;
+  place-items: center;
+}
+
+.shortcut-icon__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.94);
+  transition:
+    opacity 160ms var(--ease-out),
+    transform 220ms var(--ease-out);
+}
+
+.shortcut-icon__img--ready {
+  opacity: 1;
+  transform: none;
+}
+
+.shortcut-monogram {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.shortcut-grid--empty {
+  display: flex;
+  justify-content: center;
+}
+
+.shortcut-grid--empty .shortcut-tile--add {
+  width: 88px;
+}
+
+.shortcut-edit svg {
+  display: block;
+}
+
+.shortcut-dialog {
+  padding: 24px;
+}
+
+.shortcut-dialog__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.shortcut-dialog__preview {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  background: var(--field);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.shortcut-dialog__preview img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 13px;
+}
+
+.form-field label {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+}
+
+.form-field label span {
+  color: var(--text-ghost);
+  font-weight: 450;
+}
+
+.form-field input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  outline: none;
+  background: var(--field);
+  color: var(--text);
+  font-size: 0.8rem;
+  transition:
+    border-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+
+.form-field input::placeholder {
+  color: var(--text-ghost);
+}
+
+.form-field input:focus {
+  border-color: rgba(var(--accent-rgb), 0.52);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.13);
+}
+
+.form-field input[aria-invalid='true'] {
+  border-color: rgba(255, 122, 138, 0.5);
+}
+
+.form-field__error {
+  color: var(--danger);
+  font-size: 0.66rem;
+}
+
+.shortcut-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.shortcut-dialog__actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 760px) {
+  .shortcut-grid {
+    gap: 14px 10px;
+  }
+
+  .shortcut-tile {
+    width: 78px;
+    flex-basis: 78px;
+  }
+
+  .shortcut-grid--empty .shortcut-tile--add {
+    width: 78px;
+  }
+
+  .shortcut-tile__icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .shortcut-grid {
+    display: grid;
+    width: auto;
+    max-width: none !important;
+    grid-template-columns: repeat(3, 82px);
+    gap: 14px 10px;
+  }
+
+  .shortcut-tile {
+    width: 82px;
+    flex-basis: auto;
+  }
+
+  .shortcut-dialog {
+    padding: 19px;
+  }
+
+  .shortcut-dialog__footer {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .shortcut-dialog__actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (hover: none) {
+  .shortcut-edit {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+}

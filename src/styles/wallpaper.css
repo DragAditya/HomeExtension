@@ -1,0 +1,340 @@
+.wallpaper {
+  position: fixed;
+  z-index: var(--z-wallpaper);
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.wallpaper__parallax {
+  position: absolute;
+  inset: -3%;
+  transform: translate3d(
+    calc(var(--pointer-x, 0) * 9px),
+    calc(var(--pointer-y, 0) * 9px),
+    0
+  );
+  transition: transform 240ms var(--ease-out);
+  will-change: transform;
+}
+
+.wallpaper__scene {
+  position: absolute;
+  inset: -6%;
+  background: var(--bg);
+  filter: saturate(var(--wallpaper-sat)) blur(var(--wallpaper-blur));
+  transform: scale(1.025);
+  transition: filter var(--dur-3) var(--ease-out);
+}
+
+.wallpaper[data-kind='image'] .wallpaper__scene,
+.wallpaper[data-kind='video'] .wallpaper__scene {
+  opacity: 0;
+}
+
+.wallpaper__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: var(--wallpaper-fit);
+  filter: saturate(var(--wallpaper-sat)) blur(var(--wallpaper-blur));
+}
+
+.wallpaper[data-kind='scene'] .wallpaper__media {
+  display: none;
+}
+
+/* A playing video is composited every frame, so keep its live layer intentionally light. */
+.wallpaper[data-kind='video'] .wallpaper__parallax {
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+
+.wallpaper[data-kind='video'] .wallpaper__media {
+  transform: translateZ(0);
+  filter: saturate(var(--wallpaper-sat)) blur(min(var(--wallpaper-blur), 6px));
+  transition: opacity 320ms var(--ease-out);
+}
+
+.wallpaper[data-kind='video'] .wallpaper__scene {
+  transition:
+    opacity 320ms var(--ease-out),
+    filter var(--dur-3) var(--ease-out);
+}
+
+.wallpaper[data-kind='video'][data-media-ready='false'] .wallpaper__media {
+  opacity: 0;
+}
+
+.wallpaper[data-kind='video'][data-media-ready='false'] .wallpaper__scene {
+  opacity: 1;
+}
+
+.wallpaper[data-kind='video'] .wallpaper__grain {
+  display: none;
+}
+
+.wallpaper__dim,
+.wallpaper__vignette,
+.wallpaper__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wallpaper__dim {
+  background: #02040a;
+  opacity: var(--wallpaper-dim);
+}
+
+[data-theme='light'] .wallpaper__dim {
+  background: #2a2118;
+  opacity: calc(var(--wallpaper-dim) * 0.46);
+}
+
+.wallpaper__vignette {
+  background:
+    radial-gradient(ellipse at 50% 44%, transparent 34%, rgba(0, 0, 0, 0.56) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.16), transparent 22%, transparent 74%, rgba(0, 0, 0, 0.22));
+  opacity: var(--vignette-opacity);
+}
+
+[data-theme='light'] .wallpaper__vignette {
+  background:
+    radial-gradient(ellipse at 50% 44%, transparent 38%, rgba(62, 45, 28, 0.2) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 30%);
+  opacity: calc(var(--vignette-opacity) * 0.65);
+}
+
+.wallpaper__grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
+  opacity: var(--grain-opacity);
+}
+
+.ambient {
+  position: fixed;
+  z-index: var(--z-ambient);
+  inset: 0;
+  background:
+    radial-gradient(46% 34% at 50% 0%, rgba(var(--accent-rgb), 0.2), transparent 72%),
+    radial-gradient(34% 28% at 82% 18%, rgba(var(--accent-rgb), 0.08), transparent 75%);
+  opacity: var(--glow-strength);
+  pointer-events: none;
+}
+
+/* A quiet aurora fallback behind custom media while it loads, or if it fails. */
+[data-scene='custom'] .wallpaper__scene {
+  background:
+    radial-gradient(58% 52% at 18% 18%, rgba(95, 227, 211, 0.18), transparent 62%),
+    radial-gradient(55% 48% at 78% 12%, rgba(124, 155, 255, 0.24), transparent 65%),
+    radial-gradient(75% 65% at 55% 100%, rgba(96, 73, 190, 0.18), transparent 70%),
+    linear-gradient(155deg, #071328 0%, #03060f 44%, #050a16 100%);
+}
+
+[data-theme='light'][data-scene='custom'] .wallpaper__scene {
+  background:
+    radial-gradient(58% 52% at 18% 18%, rgba(95, 200, 190, 0.18), transparent 64%),
+    radial-gradient(55% 48% at 78% 12%, rgba(124, 155, 255, 0.18), transparent 66%),
+    linear-gradient(155deg, #fbf7ee 0%, #eef1f7 52%, #f7efe6 100%);
+}
+
+/* Aurora Veil */
+[data-scene='aurora-veil'] .wallpaper__scene {
+  background:
+    radial-gradient(58% 52% at 18% 18%, rgba(95, 227, 211, 0.2), transparent 62%),
+    radial-gradient(55% 48% at 78% 12%, rgba(124, 155, 255, 0.28), transparent 65%),
+    radial-gradient(75% 65% at 55% 100%, rgba(96, 73, 190, 0.2), transparent 70%),
+    linear-gradient(155deg, #071328 0%, #03060f 44%, #050a16 100%);
+}
+
+[data-scene='aurora-veil'] .wallpaper__scene::before {
+  position: absolute;
+  inset: -12%;
+  background:
+    conic-gradient(
+      from 210deg at 70% 20%,
+      transparent 0deg,
+      rgba(95, 227, 211, 0.1) 42deg,
+      transparent 112deg
+    ),
+    linear-gradient(115deg, transparent 26%, rgba(124, 155, 255, 0.11) 46%, transparent 64%);
+  content: '';
+  filter: blur(38px);
+  opacity: 0.8;
+  transform: rotate(-4deg);
+}
+
+/* Glacial Dusk */
+[data-scene='glacial-dusk'] .wallpaper__scene {
+  background:
+    radial-gradient(70% 50% at 18% 16%, rgba(140, 190, 255, 0.17), transparent 62%),
+    radial-gradient(48% 40% at 82% 32%, rgba(95, 227, 211, 0.09), transparent 68%),
+    linear-gradient(168deg, #0a1424 0%, #050a13 54%, #0b1724 100%);
+}
+
+[data-scene='glacial-dusk'] .wallpaper__scene::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 56%,
+    rgba(163, 213, 255, 0.08) 66%,
+    rgba(163, 213, 255, 0.02) 76%,
+    transparent 84%
+  );
+  content: '';
+  filter: blur(22px);
+}
+
+/* Ember Horizon */
+[data-scene='ember-horizon'] .wallpaper__scene {
+  background:
+    radial-gradient(70% 52% at 50% 102%, rgba(255, 147, 83, 0.26), transparent 66%),
+    radial-gradient(40% 40% at 15% 10%, rgba(255, 196, 154, 0.07), transparent 70%),
+    linear-gradient(180deg, #0b0a0f 0%, #08070b 48%, #190e09 100%);
+}
+
+[data-scene='ember-horizon'] .wallpaper__scene::before {
+  position: absolute;
+  inset: 44% -10% -10%;
+  background: radial-gradient(60% 70% at 50% 100%, rgba(255, 140, 72, 0.16), transparent 68%);
+  content: '';
+  filter: blur(36px);
+}
+
+/* Midnight Bloom */
+[data-scene='midnight-bloom'] .wallpaper__scene {
+  background:
+    radial-gradient(48% 42% at 72% 18%, rgba(123, 92, 196, 0.16), transparent 66%),
+    radial-gradient(44% 40% at 24% 76%, rgba(70, 100, 180, 0.12), transparent 70%),
+    linear-gradient(160deg, #08070f 0%, #030408 58%, #080a12 100%);
+}
+
+[data-scene='midnight-bloom'] .wallpaper__scene::before {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(40% 40% at 66% 24%, rgba(160, 130, 255, 0.08), transparent 70%);
+  content: '';
+  filter: blur(40px);
+}
+
+/* Paper Daylight (dark-theme variant is a warm dusk) */
+[data-scene='paper-daylight'] .wallpaper__scene {
+  background:
+    radial-gradient(62% 52% at 28% 18%, rgba(255, 220, 180, 0.16), transparent 66%),
+    radial-gradient(50% 40% at 80% 78%, rgba(200, 170, 130, 0.08), transparent 70%),
+    linear-gradient(160deg, #1a1510 0%, #0c0a08 58%, #15100b 100%);
+}
+
+/* Deep Field */
+[data-scene='deep-field'] .wallpaper__scene {
+  background:
+    radial-gradient(1.4px 1.4px at 18% 22%, rgba(255, 255, 255, 0.9) 50%, transparent 51%),
+    radial-gradient(1px 1px at 72% 14%, rgba(255, 255, 255, 0.72) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 84% 62%, rgba(255, 255, 255, 0.6) 50%, transparent 51%),
+    radial-gradient(1px 1px at 38% 78%, rgba(255, 255, 255, 0.6) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 56% 38%, rgba(255, 255, 255, 0.5) 50%, transparent 51%),
+    radial-gradient(1px 1px at 8% 66%, rgba(255, 255, 255, 0.45) 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 92% 18%, rgba(195, 208, 255, 0.75) 50%, transparent 51%),
+    radial-gradient(1px 1px at 28% 48%, rgba(255, 255, 255, 0.42) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 64% 88%, rgba(255, 255, 255, 0.5) 50%, transparent 51%),
+    radial-gradient(ellipse 46% 36% at 62% 34%, rgba(72, 96, 222, 0.44), transparent 68%),
+    radial-gradient(ellipse 36% 30% at 28% 68%, rgba(103, 66, 186, 0.3), transparent 70%),
+    radial-gradient(38% 40% at 78% 78%, rgba(95, 227, 211, 0.07), transparent 70%),
+    linear-gradient(160deg, #071026 0%, #02040c 56%, #060918 100%);
+}
+
+/* Light theme scene remaps */
+[data-theme='light'][data-scene='aurora-veil'] .wallpaper__scene {
+  background:
+    radial-gradient(58% 52% at 18% 18%, rgba(95, 200, 190, 0.2), transparent 64%),
+    radial-gradient(55% 48% at 78% 12%, rgba(124, 155, 255, 0.2), transparent 66%),
+    radial-gradient(70% 60% at 55% 100%, rgba(190, 176, 240, 0.24), transparent 72%),
+    linear-gradient(155deg, #fbf7ee 0%, #eef1f7 52%, #f7efe6 100%);
+}
+
+[data-theme='light'][data-scene='glacial-dusk'] .wallpaper__scene {
+  background:
+    radial-gradient(66% 50% at 18% 16%, rgba(140, 190, 255, 0.22), transparent 64%),
+    radial-gradient(48% 40% at 82% 32%, rgba(95, 200, 190, 0.12), transparent 68%),
+    linear-gradient(168deg, #f7f5ef 0%, #eef2f5 54%, #e8eef3 100%);
+}
+
+[data-theme='light'][data-scene='ember-horizon'] .wallpaper__scene {
+  background:
+    radial-gradient(70% 52% at 50% 102%, rgba(255, 167, 112, 0.3), transparent 66%),
+    radial-gradient(40% 40% at 15% 10%, rgba(255, 220, 180, 0.22), transparent 70%),
+    linear-gradient(180deg, #fbf6ed 0%, #f3eadd 52%, #f6ddc8 100%);
+}
+
+[data-theme='light'][data-scene='midnight-bloom'] .wallpaper__scene {
+  background:
+    radial-gradient(48% 42% at 72% 18%, rgba(160, 140, 220, 0.16), transparent 66%),
+    radial-gradient(44% 40% at 24% 76%, rgba(140, 160, 210, 0.14), transparent 70%),
+    linear-gradient(160deg, #f8f5f2 0%, #efedf2 58%, #f4f1f5 100%);
+}
+
+[data-theme='light'][data-scene='paper-daylight'] .wallpaper__scene {
+  background:
+    radial-gradient(62% 52% at 28% 18%, rgba(255, 220, 180, 0.5), transparent 66%),
+    radial-gradient(50% 40% at 80% 78%, rgba(200, 170, 130, 0.2), transparent 70%),
+    linear-gradient(160deg, #fbf7ee 0%, #f4ede1 58%, #f8f1e6 100%);
+}
+
+[data-theme='light'][data-scene='deep-field'] .wallpaper__scene {
+  background:
+    radial-gradient(1px 1px at 18% 22%, rgba(60, 70, 100, 0.5) 50%, transparent 51%),
+    radial-gradient(1px 1px at 72% 14%, rgba(60, 70, 100, 0.4) 50%, transparent 51%),
+    radial-gradient(1px 1px at 84% 62%, rgba(60, 70, 100, 0.35) 50%, transparent 51%),
+    radial-gradient(46% 44% at 68% 30%, rgba(124, 155, 255, 0.12), transparent 68%),
+    linear-gradient(160deg, #f5f3ee 0%, #eceef4 60%, #f3f1eb 100%);
+}
+
+[data-theme='light'] .wallpaper__grain {
+  mix-blend-mode: multiply;
+}
+
+[data-drift='on'] [data-scene='aurora-veil'] .wallpaper__scene::before {
+  animation: aurora-drift 44s ease-in-out infinite alternate;
+}
+
+[data-drift='on'] [data-scene='ember-horizon'] .wallpaper__scene::before {
+  animation: ember-breathe 22s ease-in-out infinite alternate;
+}
+
+[data-drift='on'] [data-scene='deep-field'] .wallpaper__scene::before {
+  animation: star-breathe 30s ease-in-out infinite alternate;
+}
+
+[data-drift='on'] [data-scene='aurora-veil'] .wallpaper__scene {
+  animation: slow-scale 60s ease-in-out infinite alternate;
+}
+
+[data-scene='deep-field'] .wallpaper__scene::before {
+  position: absolute;
+  inset: -8%;
+  background:
+    radial-gradient(ellipse 34% 26% at 64% 32%, rgba(102, 126, 255, 0.22), transparent 70%),
+    radial-gradient(ellipse 28% 24% at 30% 68%, rgba(143, 103, 255, 0.16), transparent 72%);
+  content: '';
+  filter: blur(30px);
+}
+
+[data-theme='light'] [data-scene='aurora-veil'] .wallpaper__scene::before,
+[data-theme='light'] [data-scene='deep-field'] .wallpaper__scene::before {
+  opacity: 0.42;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wallpaper__scene,
+  .wallpaper__scene::before,
+  .wallpaper__parallax {
+    animation: none !important;
+    transition: none !important;
+    transform: none;
+  }
+}

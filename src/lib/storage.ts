@@ -5,6 +5,8 @@ import { normalizeSettings } from './settings/normalize';
 import type { Settings } from './settings/types';
 
 export const SETTINGS_KEY = 'lumen.settings.v2';
+export const DESIGN_REVISION_KEY = 'lumen.design.revision';
+const DESIGN_REVISION = 2;
 export const RECOVERY_KEY = 'lumen.settings.recovery';
 export const RECENT_SEARCHES_KEY = 'lumen.recentSearches';
 export const SPOTIFY_TOKENS_KEY = 'lumen.spotify.tokens';
@@ -150,7 +152,89 @@ if (typeof window !== 'undefined') {
   });
 }
 
-export async function loadSettings(): Promise<{ settings: Settings; migrated: boolean }> {
+function applyDesignRevision(settings: Settings): Settings {
+  const widgets = settings.layout.widgets;
+  const timeStage =
+    widgets.greeting &&
+    widgets.clock &&
+    widgets.date &&
+    widgets.search &&
+    widgets.shortcuts;
+  // Spotify now rides inside the search surface, so it no longer makes the
+  // stage feel busy. Weather, focus, and notes still define the old layout.
+  const classicExtras = widgets.weather && widgets.focus && widgets.notes;
+  const quietStage = !widgets.weather && !widgets.focus && !widgets.notes;
+  if (!timeStage || !(classicExtras || quietStage)) return settings;
+
+  const appearance = settings.appearance;
+  const untouchedAppearance =
+    appearance.theme === 'dark' &&
+    appearance.accent === '#7c9bff' &&
+    appearance.vibe === 'aurora' &&
+    appearance.wallpaper.kind === 'scene' &&
+    appearance.wallpaper.scene === 'aurora-veil' &&
+    appearance.wallpaperFit === 'cover' &&
+    appearance.wallpaperDim === 34 &&
+    appearance.wallpaperBlur === 0 &&
+    appearance.wallpaperSaturation === 100 &&
+    !appearance.timeShift &&
+    appearance.effects.grain === 10 &&
+    appearance.effects.vignette === 26 &&
+    appearance.effects.glow === 30 &&
+    appearance.effects.drift &&
+    !appearance.effects.parallax &&
+    appearance.glassIntensity === 52 &&
+    appearance.radius === 20 &&
+    appearance.density === 'comfortable' &&
+    appearance.readabilityBoost &&
+    appearance.motion === 'full';
+
+  return {
+    ...settings,
+    appearance: untouchedAppearance ? cloneDefaults().appearance : settings.appearance,
+    layout: {
+      ...settings.layout,
+      shortcutColumns: settings.layout.shortcutColumns === 4 ? 6 : settings.layout.shortcutColumns,
+      widgets: {
+        ...widgets,
+        greeting: false,
+        clock: false,
+        date: false,
+        search: true,
+        shortcuts: true,
+        weather: false,
+        spotify: widgets.spotify,
+        focus: false,
+        notes: false,
+      },
+    },
+    search: settings.search.autofocus
+      ? { ...settings.search, autofocus: false }
+      : settings.search,
+  };
+}
+
+function hasLegacySpotifyToken(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return Boolean(window.localStorage.getItem('lumen-spotify-token'));
+  } catch {
+    return false;
+  }
+}
+
+function enableSearchSpotify(settings: Settings): Settings {
+  if (settings.layout.widgets.spotify || !hasLegacySpotifyToken()) return settings;
+  return {
+    ...settings,
+    layout: {
+      ...settings.layout,
+      widgets: { ...settings.layout.widgets, spotify: true },
+    },
+  };
+}
+
+async function readSettings(): Promise<{ settings: Settings; migrated: boolean }> {
   let stored: unknown;
   try {
     stored = await storageGet<unknown>(SETTINGS_KEY);
@@ -188,4 +272,29 @@ export async function loadSettings(): Promise<{ settings: Settings; migrated: bo
   }
 
   return { settings: cloneDefaults(), migrated: false };
+}
+
+export async function loadSettings(): Promise<{ settings: Settings; migrated: boolean }> {
+  const loaded = await readSettings();
+  let revision: unknown;
+  try {
+    revision = await storageGet(DESIGN_REVISION_KEY);
+  } catch {
+    revision = undefined;
+  }
+  if (revision === DESIGN_REVISION) return loaded;
+
+  // Revision 2 only moves Spotify into the search bar. Do not re-run the
+  // stage reset for people who already received revision 1.
+  const settings =
+    revision === 1
+      ? enableSearchSpotify(loaded.settings)
+      : applyDesignRevision(loaded.settings);
+  try {
+    if (settings !== loaded.settings) await saveSettings(settings);
+    await storageSet(DESIGN_REVISION_KEY, DESIGN_REVISION);
+  } catch {
+    // A failed marker write only means this quiet migration may run again.
+  }
+  return { settings, migrated: loaded.migrated || settings !== loaded.settings };
 }

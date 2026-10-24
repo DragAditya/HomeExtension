@@ -137,11 +137,11 @@ export function normalizeShortcuts(value: unknown): Shortcut[] {
 const SCENE_IDS = new Set<string>(SCENES.map((scene) => scene.id));
 
 export function normalizeWallpaper(value: unknown): WallpaperSource {
-  if (!isPlainObject(value)) return { kind: 'scene', scene: 'aurora-veil' };
+  if (!isPlainObject(value)) return { kind: 'scene', scene: 'deep-field' };
   if (value.kind === 'scene') {
     const scene = typeof value.scene === 'string' && SCENE_IDS.has(value.scene)
       ? (value.scene as SceneId)
-      : 'aurora-veil';
+      : 'deep-field';
     return { kind: 'scene', scene };
   }
   if (value.kind === 'image' || value.kind === 'video') {
@@ -151,9 +151,9 @@ export function normalizeWallpaper(value: unknown): WallpaperSource {
       /^https?:\/\//i.test(rawUrl) && rawUrl.length <= 4096 ? rawUrl : '';
     if (id) return { kind: value.kind, url, id };
     if (url) return { kind: value.kind, url };
-    return { kind: 'scene', scene: 'aurora-veil' };
+    return { kind: 'scene', scene: 'deep-field' };
   }
-  return { kind: 'scene', scene: 'aurora-veil' };
+  return { kind: 'scene', scene: 'deep-field' };
 }
 
 export function isValidTemplate(value: string): boolean {

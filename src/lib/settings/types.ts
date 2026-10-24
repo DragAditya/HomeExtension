@@ -3,7 +3,7 @@ export type DateStyle = 'short' | 'long';
 export type Alignment = 'center' | 'left';
 export type Density = 'comfortable' | 'compact';
 export type MotionMode = 'full' | 'reduced';
-export type VibeId = 'aurora' | 'frost' | 'ember' | 'noir' | 'daylight';
+export type VibeId = 'deep-field' | 'aurora' | 'frost' | 'ember' | 'noir' | 'daylight';
 export type SceneId =
   | 'aurora-veil'
   | 'glacial-dusk'

@@ -2,7 +2,12 @@ node_modules/
 dist/
 .vite/
 coverage/
+archive/
+.env
+.env.*
 *.log
+*.zip
+*.tsbuildinfo
 .DS_Store
 Thumbs.db
 docs/superpowers/specs/*.local.md

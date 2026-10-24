@@ -11,7 +11,7 @@ import { getValue, setValue } from '../src/lib/settings/paths';
 
 describe('settings paths', () => {
   it('reads nested values', () => {
-    expect(getValue(DEFAULT_SETTINGS, 'appearance.effects.grain')).toBe(10);
+    expect(getValue(DEFAULT_SETTINGS, 'appearance.effects.grain')).toBe(8);
     expect(getValue(DEFAULT_SETTINGS, 'missing.path')).toBeUndefined();
   });
 
@@ -46,7 +46,7 @@ describe('normalizeSettings', () => {
     expect(settings.appearance.theme).toBe('dark');
     expect(settings.appearance.accent).toBe('#aabbcc');
     expect(settings.appearance.wallpaperDim).toBe(0);
-    expect(settings.layout.shortcutColumns).toBe(4);
+    expect(settings.layout.shortcutColumns).toBe(6);
     expect(settings.search.engine).toBe('google');
   });
 
@@ -88,8 +88,8 @@ describe('normalizeSettings', () => {
   });
 
   it('infers a vibe from matching appearance values', () => {
-    const aurora = normalizeSettings(cloneDefaults());
-    expect(aurora.appearance.vibe).toBe('aurora');
+    const deepField = normalizeSettings(cloneDefaults());
+    expect(deepField.appearance.vibe).toBe('deep-field');
 
     const custom = normalizeSettings({
       ...cloneDefaults(),

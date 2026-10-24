@@ -1,0 +1,134 @@
+.dialog--notes {
+  position: fixed;
+  top: 84px;
+  right: 22px;
+  bottom: auto;
+  left: auto;
+  width: min(372px, calc(100vw - 32px));
+  height: min(560px, calc(100dvh - 112px));
+  max-height: none;
+  margin: 0;
+  overflow: hidden;
+  animation: notes-in var(--dur-3) var(--ease-soft);
+}
+
+.notes-panel {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.notes-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 17px 17px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notes-panel__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notes-panel__mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--accent-faint);
+  color: var(--accent);
+}
+
+.notes-panel__mark svg {
+  width: 16px;
+  height: 16px;
+}
+
+.notes-panel__editor {
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  padding: 18px;
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 430;
+  line-height: 1.72;
+  scrollbar-color: var(--field-active) transparent;
+}
+
+.notes-panel__editor::placeholder {
+  color: var(--text-ghost);
+}
+
+.notes-panel__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--accent-faint);
+}
+
+.notes-panel__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text-ghost);
+  font-size: 0.61rem;
+}
+
+.notes-panel__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-faint);
+}
+
+.notes-panel__status svg {
+  width: 11px;
+  height: 11px;
+  color: var(--success);
+}
+
+.notes-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+@keyframes notes-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .dialog--notes {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+    height: min(72dvh, 600px);
+  }
+
+  .notes-panel__actions .button {
+    flex: 1;
+  }
+}

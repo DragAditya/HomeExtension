@@ -1,0 +1,208 @@
+.focus-widget {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 3px;
+  overflow: hidden;
+}
+
+.focus-widget__ring {
+  position: relative;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--text-dim);
+  transition:
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-2) var(--ease-out);
+}
+
+.focus-widget__ring:hover {
+  color: var(--text);
+  transform: scale(1.04);
+}
+
+.focus-widget__ring svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.focus-widget__track {
+  fill: none;
+  stroke: var(--field-active);
+  stroke-width: 2.4;
+}
+
+.focus-widget__progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linecap: round;
+  stroke-width: 2.4;
+  transition: stroke-dashoffset 0.45s linear;
+}
+
+.focus-widget__ring-icon {
+  position: relative;
+  width: 15px !important;
+  height: 15px !important;
+  color: var(--accent);
+}
+
+.focus-widget--running .focus-widget__ring::after {
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(var(--accent-rgb), 0.26);
+  border-radius: 50%;
+  animation: focus-breathe 3.2s ease-in-out infinite;
+  content: '';
+}
+
+.focus-widget__copy {
+  min-width: 64px;
+}
+
+.focus-widget__time {
+  color: var(--text);
+  font-size: 0.94rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  line-height: 1.1;
+}
+
+.focus-widget__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  color: var(--text-faint);
+  font-size: 0.58rem;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.focus-widget__sessions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.focus-widget__sessions i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.focus-widget__sessions span {
+  margin-left: 3px;
+  color: var(--text-ghost);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.focus-widget__actions {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.focus-action {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--text-ghost);
+  transition:
+    background var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out);
+}
+
+.focus-action:hover {
+  background: var(--field-hover);
+  color: var(--text-dim);
+}
+
+.focus-action svg {
+  width: 12px;
+  height: 12px;
+}
+
+.focus-widget__watermark {
+  display: none;
+}
+
+.status-chip--focus {
+  position: relative;
+  overflow: hidden;
+}
+
+.status-chip--focus::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--focus-progress, 0%),
+    transparent var(--focus-progress, 0%)
+  );
+  content: '';
+}
+
+.status-chip__state {
+  width: 11px !important;
+  height: 11px !important;
+  margin-left: 1px;
+  color: var(--text-ghost) !important;
+}
+
+@keyframes focus-breathe {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.03);
+  }
+}
+
+@media (max-width: 760px) {
+  .focus-widget__sessions {
+    display: none;
+  }
+
+  .focus-widget__actions .focus-action:first-child {
+    display: none;
+  }
+}
+
+@media (max-width: 540px) {
+  .focus-widget__copy {
+    display: none;
+  }
+
+  .focus-widget {
+    padding-right: 0;
+  }
+
+  .focus-widget__actions {
+    display: none;
+  }
+}

@@ -1,0 +1,130 @@
+.search__clear {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text-faint);
+  transition:
+    background var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out);
+}
+
+.search__clear:hover {
+  border-color: rgba(var(--accent-rgb), 0.3);
+  background: var(--field-hover);
+  color: var(--text);
+}
+
+.search__clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+.search__spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+.search__group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 7px;
+}
+
+.search__group-action {
+  padding: 4px 5px;
+  border-radius: 5px;
+  color: var(--text-ghost);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition:
+    color var(--dur-1) var(--ease-out),
+    background var(--dur-1) var(--ease-out);
+}
+
+.search__group-action:hover {
+  background: var(--field-hover);
+  color: var(--text-dim);
+}
+
+.search__panel {
+  max-height: min(440px, 52vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.search__suggestion strong {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.search__loading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 11px;
+  color: var(--text-faint);
+  font-size: 0.76rem;
+}
+
+.search__loading svg {
+  width: 14px;
+  height: 14px;
+  animation: spin 0.8s linear infinite;
+}
+
+.search__engine-divider {
+  height: 1px;
+  margin: 5px 7px;
+  background: var(--line);
+}
+
+.search__engine-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+@media (max-width: 560px) {
+  .search__form {
+    border-radius: 30px;
+  }
+
+  .search__row {
+    height: 58px;
+    gap: 9px;
+    padding-right: 10px;
+    padding-left: 18px;
+  }
+
+  .search__input {
+    font-size: 0.98rem;
+  }
+
+  .search__engine {
+    width: 30px;
+    height: 30px;
+  }
+
+  .search__engine .engine-option__mark {
+    width: 25px;
+    height: 25px;
+  }
+
+  .search__hint {
+    height: 24px;
+    padding: 0 7px;
+    font-size: 0.57rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .search__hint {
+    display: none;
+  }
+}

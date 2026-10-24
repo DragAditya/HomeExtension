@@ -18,6 +18,17 @@ export type Vibe = {
 };
 
 export const VIBES: Record<VibeId, Vibe> = {
+  'deep-field': {
+    id: 'deep-field',
+    label: 'Deep Field',
+    blurb: 'A quiet galaxy, far stars, and a cool blue hush.',
+    theme: 'dark',
+    accent: '#7c9bff',
+    scene: 'deep-field',
+    wallpaperDim: 18,
+    wallpaperSaturation: 112,
+    effects: { grain: 8, vignette: 22, glow: 20, drift: true },
+  },
   aurora: {
     id: 'aurora',
     label: 'Aurora',

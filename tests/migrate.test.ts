@@ -70,7 +70,7 @@ describe('migrateLegacy', () => {
     const settings = migrateLegacy({ showDate: false }, null);
     expect(settings?.layout.widgets.date).toBe(false);
     expect(settings?.appearance.theme).toBe(DEFAULT_SETTINGS.appearance.theme);
-    expect(settings?.layout.widgets.clock).toBe(true);
+    expect(settings?.layout.widgets.clock).toBe(false);
   });
 
   it('collapses changed legacy search material values into one override', () => {

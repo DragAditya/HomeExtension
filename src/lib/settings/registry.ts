@@ -230,7 +230,7 @@ export const SETTINGS_REGISTRY: SettingMeta[] = [
     path: 'appearance.radius',
     section: 'appearance',
     label: 'Corner radius',
-    help: 'Shared by search, tiles, dock, and panels.',
+    help: 'Shared by tiles, dock, panels, and controls.',
     kind: 'slider',
     min: 8,
     max: 32,
@@ -352,7 +352,7 @@ export const SETTINGS_REGISTRY: SettingMeta[] = [
     path: 'layout.shortcutColumns',
     section: 'layout',
     label: 'Shortcut columns',
-    help: 'Two rows are shown. More columns fit more tiles.',
+    help: 'The row caps at this many tiles on wide screens.',
     kind: 'segmented',
     options: [
       { value: 4, label: '4' },
